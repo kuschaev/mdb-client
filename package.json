@@ -2,7 +2,7 @@
     "name": "mdb-client",
     "version": "0.1.0",
     "author": "Nikolai Kuschaev",
-    "homepage": "",
+    "homepage": "http://kuschaev.github.io/mdb-client",
     "private": true,
     "dependencies": {
         "react": "^16.10.2",
