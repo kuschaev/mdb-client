@@ -4,7 +4,7 @@ import React from 'react';
 import { BASE_IMAGE_URL } from '../../api/config';
 import styled from 'styled-components';
 
-const PosterContainer = styled.div`
+const PosterCardContainer = styled.div`
     margin: 16px;
     height: 300px;
     outline: 1px #dadadada solid;
@@ -37,7 +37,7 @@ const Description = styled.p`
     color: #4d4d4d;
 `;
 
-const PosterCard = ({ title, name , poster_path, overview, original_title, original_name}) => {
+const PosterCard = ({ title, name, poster_path, overview}) => {
     const imageSize = '/w500';
     const image_full_url = BASE_IMAGE_URL + imageSize + poster_path;
     // TODO: add fallback image
@@ -46,7 +46,7 @@ const PosterCard = ({ title, name , poster_path, overview, original_title, origi
         `${overview.substring(0, 218).split(' ').slice(0, -1).join(' ')}...`;
 
     return (
-        <PosterContainer>
+        <PosterCardContainer>
             <PosterImageContainer>
                 <PosterImage src={image_full_url} alt={alt_src} />
             </PosterImageContainer>
@@ -56,7 +56,7 @@ const PosterCard = ({ title, name , poster_path, overview, original_title, origi
                     {truncatedOverview}
                 </Description>
             </PosterInfoContainer>
-        </PosterContainer>
+        </PosterCardContainer>
     );
 }
 

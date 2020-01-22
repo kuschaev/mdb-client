@@ -10,7 +10,8 @@ export const api = {
         video = 'true',
         page = '1'
     ) => {
-        const query = `api_key=${API_KEY}&language=${language}&sort_by=${sort_by}&year=${year}&include_adult=${adult}&include_video=${video}&page=${page}`;
+        const year_query = type === 'movie' ? `year=${year}`: `first_air_date_year=${year}`;
+        const query = `api_key=${API_KEY}&language=${language}&sort_by=${sort_by}&${year_query}&include_adult=${adult}&include_video=${video}&page=${page}`;
         const result = await fetch(`${ROOT_URI}/discover/${type}?${query}`, {
             method: 'GET'
         });

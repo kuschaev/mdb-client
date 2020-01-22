@@ -1,32 +1,16 @@
 // Core
 import React, { useState, useEffect } from 'react';
 // Components
-import PosterList from '../PosterList';
 import ControlPanel from '../ControlPanel';
+import PosterList from '../PosterList';
+import Spinner from '../Spinner';
 // Instruments
 import { api } from '../../api/api';
-import styled, { keyframes } from 'styled-components';
-const rotated = keyframes`
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-`;
-const LoadingSpinner = styled.div`
-    width: 30px;
-    height: 30px;
-    border: 3px solid #a6a6ff;
-    border-top: 4px solid #4f4fff;
-    border-radius: 100%;
-    margin: auto;
-    animation: ${rotated} 1s infinite linear;
-    z-index: 1;
-`;
+
 const yearsSince1900 = Array(new Date().getFullYear() - 1899)
     .fill()
-    .map((_, index) => index + 1900);
+    .map((_, index) => index + 1900)
+    .sort((a, b) => b - a);
 
 function ListView(props) {
     const [mediaFormat, setMediaFormat] = useState('movie');
@@ -65,7 +49,7 @@ function ListView(props) {
                 yearsChangeHandler={handleSelectedYearChange}
             />
             {isLoading ? (
-                <LoadingSpinner></LoadingSpinner>
+                <Spinner />
             ) : (
                 <PosterList posters={postersList} type={mediaFormat} />
             )}
