@@ -6,6 +6,17 @@ import PosterList from '../PosterList';
 import Spinner from '../Spinner';
 // Instruments
 import { api } from '../../api/api';
+import styled from 'styled-components';
+
+const ListViewFlexContainer = styled.div`
+    flex: 1;
+`;
+const SpinnerFlexContainer = styled.div`
+    height: calc(100vh - 172px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 const yearsSince1900 = Array(new Date().getFullYear() - 1899)
     .fill()
@@ -41,7 +52,7 @@ function ListView(props) {
     }, [mediaFormat, selectedYear]);
 
     return (
-        <>
+        <ListViewFlexContainer>
             <ControlPanel
                 mediaFormats={mediaFormats}
                 mediaFormatChangeHandler={handleMediaFormatChange}
@@ -49,11 +60,13 @@ function ListView(props) {
                 yearsChangeHandler={handleSelectedYearChange}
             />
             {isLoading ? (
-                <Spinner />
+                <SpinnerFlexContainer>
+                    <Spinner />
+                </SpinnerFlexContainer>
             ) : (
                 <PosterList posters={postersList} type={mediaFormat} />
             )}
-        </>
+        </ListViewFlexContainer>
     );
 }
 

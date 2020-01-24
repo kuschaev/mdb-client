@@ -7,6 +7,7 @@ import PosterCard from '../PosterCard';
 import styled from 'styled-components';
 
 const ListContainer = styled.div`
+    height: 100%;
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;

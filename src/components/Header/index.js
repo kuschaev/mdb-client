@@ -6,6 +6,7 @@ import styled from 'styled-components';
 const HeaderBlock = styled.div`
     background-color: #323232;
     height: 64px;
+    width: 100%;
 `;
 
 function Header(props) {

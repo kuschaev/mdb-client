@@ -5,6 +5,17 @@ import MediaItem from '../MediaItem';
 import Spinner from '../Spinner';
 // Instruments
 import { api } from '../../api/api';
+import styled from 'styled-components';
+
+const ItemViewFlexContainer = styled.div`
+    flex: 1;
+`;
+const SpinnerFlexContainer = styled.div`
+    height: calc(100vh - 136px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 function ItemView({ history, location, match }) {
     const { type, id } = match.params;
@@ -21,7 +32,17 @@ function ItemView({ history, location, match }) {
         getCurrentItem();
     }, [type, id]);
 
-    return isLoading ? <Spinner /> : <MediaItem type={type} {...currentItem} />;
+    return (
+        <ItemViewFlexContainer>
+            {isLoading ? (
+                <SpinnerFlexContainer>
+                    <Spinner />
+                </SpinnerFlexContainer>
+            ) : (
+                <MediaItem type={type} {...currentItem} />
+            )}
+        </ItemViewFlexContainer>
+    );
 }
 
 export default ItemView;
