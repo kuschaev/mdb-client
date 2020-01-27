@@ -28,9 +28,19 @@ function App() {
                 <FlexContainer>
                     <Header />
                     <Switch>
-                        <Route path={'/list'} component={ListView} />
-                        <Route path={'/:type/:id'} component={ItemView} />
-                        <Redirect to={'/list'} />
+                        <Route path={'/discover/movie'} component={ListView} />
+                        <Route path={'/discover/tv'} component={ListView} />
+                        <Route path={'/movie/popular'} component={ListView} />
+                        <Route path={'/movie/top_rated'} component={ListView} />
+                        <Route path={'/movie/now_playing'} component={ListView} />
+                        <Route path={'/movie/upcoming'} component={ListView} />
+                        <Route path={'/movie/:id'} component={ItemView} />
+                        <Route path={'/tv/popular'} component={ListView} />
+                        <Route path={'/tv/top_rated'} component={ListView} />
+                        <Route path={'/tv/on_the_air'} component={ListView} />
+                        <Route path={'/tv/airing_today'} component={ListView} />
+                        <Route path={'/tv/:id'} component={ItemView} />
+                        <Redirect to={'/discover/movie'}  />
                     </Switch>
                     <Footer />
                 </FlexContainer>

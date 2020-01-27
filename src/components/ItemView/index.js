@@ -18,7 +18,10 @@ const SpinnerFlexContainer = styled.div`
 `;
 
 function ItemView({ history, location, match }) {
-    const { type, id } = match.params;
+    const { pathname } = location;
+    const type = pathname.split('/')[1];
+    const { id } = match.params;
+
     const [isLoading, setIsLoading] = useState(true);
     const [currentItem, setCurrentItem] = useState({});
 

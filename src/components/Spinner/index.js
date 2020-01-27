@@ -12,10 +12,10 @@ const rotated = keyframes`
     }
 `;
 const LoadingSpinner = styled.div`
-    width: 30px;
-    height: 30px;
-    border: 3px solid #a6a6ff;
-    border-top: 4px solid #4f4fff;
+    width: 40px;
+    height: 40px;
+    border: 5px solid #ffcc99;
+    border-top: 6px solid #ff8533;
     border-radius: 100%;
     margin: auto;
     animation: ${rotated} 1s infinite linear;

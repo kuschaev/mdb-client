@@ -16,10 +16,14 @@ const ListContainer = styled.div`
 const StyledLink = styled(Link)`
     text-decoration: none;
     cursor: default;
-    &:hover, &:focus, &:visited, &:active, &:link {
+    &:hover,
+    &:focus,
+    &:visited,
+    &:active,
+    &:link {
         text-decoration: none;
     }
-`
+`;
 
 const PosterList = ({ posters, type }) => (
     <ListContainer>

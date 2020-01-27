@@ -23,8 +23,13 @@ const yearsSince1900 = Array(new Date().getFullYear() - 1899)
     .map((_, index) => index + 1900)
     .sort((a, b) => b - a);
 
-function ListView(props) {
-    const [mediaFormat, setMediaFormat] = useState('movie');
+function ListView({ history, location, match }) {
+
+    const { pathname } = location;
+    const type = pathname.split('/')[1];
+    const subtype = pathname.split('/')[2];
+    
+    const [mediaFormat, setMediaFormat] = useState(subtype);
     const [selectedYear, setYear] = useState(2019);
     const [isLoading, setIsLoading] = useState(true);
     const [postersList, setPostersList] = useState([]);
@@ -38,18 +43,18 @@ function ListView(props) {
     useEffect(() => {
         setIsLoading(true);
         const getPostersList = async () => {
-            const list = await api.getDiscover(
-                mediaFormat,
-                undefined,
-                undefined,
-                selectedYear
-            );
+            let list = [];
+            if (type === 'discover') {
+                list = await api.getDiscover(subtype, undefined, undefined, selectedYear);
+            } else {
+                list = await api.getList(type, subtype);
+            }
             setPostersList(list);
             setIsLoading(false);
         };
 
         getPostersList();
-    }, [mediaFormat, selectedYear]);
+    }, [type, subtype, selectedYear]);
 
     return (
         <ListViewFlexContainer>
@@ -64,7 +69,7 @@ function ListView(props) {
                     <Spinner />
                 </SpinnerFlexContainer>
             ) : (
-                <PosterList posters={postersList} type={mediaFormat} />
+                <PosterList posters={postersList} type={type === 'discover' ? subtype : type} />
             )}
         </ListViewFlexContainer>
     );
