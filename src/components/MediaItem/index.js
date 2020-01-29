@@ -77,7 +77,7 @@ const MediaItem = props => {
                     ></PosterImage>
                 </PosterImageContainer>
                 <InfoContainer>
-                    <MediaTitle>{title ? title : name}</MediaTitle>
+                    <MediaTitle>{title || name}</MediaTitle>
                     <Year>
                         {type === 'movie'
                             ? `(${year})`

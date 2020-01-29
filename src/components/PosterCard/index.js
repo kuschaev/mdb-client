@@ -14,6 +14,8 @@ const PosterCardContainer = styled.div`
 `;
 const PosterImageContainer = styled.div`
     height: 300px;
+    width: 200px;
+    overflow: hidden;
     cursor: pointer;
 `;
 const PosterImage = styled.img`

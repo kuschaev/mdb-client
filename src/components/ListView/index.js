@@ -24,11 +24,8 @@ const yearsSince1900 = Array(new Date().getFullYear() - 1899)
     .sort((a, b) => b - a);
 
 function ListView({ history, location, match }) {
+    const { type, listType: subtype } = match.params;
 
-    const { pathname } = location;
-    const type = pathname.split('/')[1];
-    const subtype = pathname.split('/')[2];
-    
     const [mediaFormat, setMediaFormat] = useState(subtype);
     const [selectedYear, setYear] = useState(2019);
     const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +42,12 @@ function ListView({ history, location, match }) {
         const getPostersList = async () => {
             let list = [];
             if (type === 'discover') {
-                list = await api.getDiscover(subtype, undefined, undefined, selectedYear);
+                list = await api.getDiscover(
+                    subtype,
+                    undefined,
+                    undefined,
+                    selectedYear
+                );
             } else {
                 list = await api.getList(type, subtype);
             }
@@ -69,7 +71,10 @@ function ListView({ history, location, match }) {
                     <Spinner />
                 </SpinnerFlexContainer>
             ) : (
-                <PosterList posters={postersList} type={type === 'discover' ? subtype : type} />
+                <PosterList
+                    posters={postersList}
+                    type={type === 'discover' ? subtype : type}
+                />
             )}
         </ListViewFlexContainer>
     );

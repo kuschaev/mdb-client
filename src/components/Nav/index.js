@@ -1,8 +1,9 @@
 // Core
 import React, { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 // Instruments
-import styled from 'styled-components';
+import Navigator from '../../instruments/navigator';
+import styled, { css } from 'styled-components';
 
 const NavContainer = styled.div`
     display: flex;
@@ -11,112 +12,88 @@ const NavContainer = styled.div`
 const MenuContainer = styled.div`
     display: flex;
     flex-direction: row;
-    margin: 5px 0px 3px 10px;
+    margin: 5px 0px 0px 10px;
 `;
 const SubMenuContainer = styled(MenuContainer)`
-    margin: 2px 0px 2px 10px;
+    margin: 0px 0px 2px 10px;
 `;
 const StyledMenuItem = styled.div`
+    ${props =>
+        props.isActive
+            ? css`
+                  color: #f5cf11;
+                  background-color: #252525;
+                  border-radius: 5px 5px 0 0;
+                  box-shadow: 1px 1px #111;
+              `
+            : css`
+                  color: #ff8340;
+                  &:hover {
+                      color: #eee;
+                  }
+              `}
     font-size: 14px;
     font-weight: 500;
     text-transform: uppercase;
-    color: #ff8340;
-    ${'' /* background-color: #252525; */}
-    margin: 4px 7px 4px 7px;
-    ${'' /* width: 80px; */}
+    padding: 4px 7px;
     cursor: pointer;
 `;
 const SubMenuItem = styled(StyledMenuItem)`
     font-size: 12px;
     font-weight: 400;
     text-transform: none;
+    background-color: #252525;
+    box-shadow: 1px 1px #111;
+    &:hover {
+        color: #eee;
+    }
+    &:first-child {
+        border-radius: 0 0 0 5px;
+    }
+    &:last-child {
+        border-radius: 0 5px 5px 0;
+    }
 `;
 
-const Navigator = new Map([
-    [
-        { label: 'Discover', type: 'discover', key: 'd' },
-        [
-            { label: 'Movies', type: 'discover', subtype: 'movie', key: 'dm' },
-            { label: 'TV Shows', type: 'discover', subtype: 'tv', key: 'dtv' }
-        ]
-    ],
-    [
-        { label: 'Movies', type: 'movie', key: 'm' },
-        [
-            { label: 'Popular', type: 'movie', subtype: 'popular', key: 'mp' },
-            {
-                label: 'Top Rated',
-                type: 'movie',
-                subtype: 'top_rated',
-                key: 'mtr'
-            },
-            {
-                label: 'Now Playing',
-                type: 'movie',
-                subtype: 'now_playing',
-                key: 'mnp'
-            },
-            { label: 'Upcoming', type: 'movie', subtype: 'upcoming', key: 'mu' }
-        ]
-    ],
-    [
-        { label: 'TV Shows', type: 'tv', key: 'tv' },
-        [
-            { label: 'Popular', type: 'tv', subtype: 'popular', key: 'tvp' },
-            {
-                label: 'Top Rated',
-                type: 'tv',
-                subtype: 'top_rated',
-                key: 'tvtr'
-            },
-            {
-                label: 'On TV',
-                type: 'tv',
-                subtype: 'on_the_air',
-                key: 'tvotr'
-            },
-            {
-                label: 'Airing Today',
-                type: 'tv',
-                subtype: 'airing_today',
-                key: 'tvat'
-            }
-        ]
-    ]
-]);
-
-const MenuItem = ({ label, elementRef, itemClickHandler }) => {
+const MenuItem = ({ label, isActive, elementRef, itemClickHandler }) => {
     const handleClick = event => {
         event.preventDefault();
-        itemClickHandler(elementRef);
+        itemClickHandler(event, elementRef);
     };
-    return <StyledMenuItem onClick={handleClick}>{label}</StyledMenuItem>;
+    return (
+        <StyledMenuItem onClick={handleClick} isActive={isActive}>
+            {label}
+        </StyledMenuItem>
+    );
 };
 
 const Nav = ({ history }) => {
+    const [activeMenuItem, setActiveMenuItem] = useState(null);
     const [subMenuVisible, setSubMenuVisibility] = useState(false);
     const [subMenuJSX, setSubMenuJSX] = useState(null);
 
     function navigateTo(event) {
         const { type, subtype } = event.currentTarget.dataset;
-        const path = `/${type}/${subtype}`;
+        const path = `/list/${type}/${subtype}`;
         history.push(path);
     }
 
-    const handleMenuItemClick = elementRef => {
+    const handleMenuItemClick = (event, elementRef) => {
         setSubMenuVisibility(true);
+        setActiveMenuItem(elementRef.type);
 
-        const smJSX = Navigator.get(elementRef).map(subMenuItem => (
-            <SubMenuItem
-                key={subMenuItem.key}
-                data-type={subMenuItem.type}
-                data-subtype={subMenuItem.subtype}
-                onClick={navigateTo}
-            >
-                {subMenuItem.label}
-            </SubMenuItem>
-        ));
-        console.log('smJSX', smJSX);
+        const smJSX = Navigator.get(elementRef).map(
+            ({ key, type, subtype, label }) => (
+                <SubMenuItem
+                    key={key}
+                    data-type={type}
+                    data-subtype={subtype}
+                    onClick={navigateTo}
+                >
+                    {label}
+                </SubMenuItem>
+            )
+        );
 
         setSubMenuJSX(smJSX);
     };
@@ -129,13 +106,12 @@ const Nav = ({ history }) => {
                         label={element.label}
                         key={element.key}
                         elementRef={element}
+                        isActive={element.type === activeMenuItem}
                         itemClickHandler={handleMenuItemClick}
                     />
                 ))}
             </MenuContainer>
-            <SubMenuContainer>
-                {subMenuVisible ? subMenuJSX : null}
-            </SubMenuContainer>
+            <SubMenuContainer>{subMenuVisible && subMenuJSX}</SubMenuContainer>
         </NavContainer>
     );
 };

@@ -28,7 +28,7 @@ const StyledLink = styled(Link)`
 const PosterList = ({ posters, type }) => (
     <ListContainer>
         {posters.map(poster => (
-            <StyledLink key={poster.id} to={`/${type}/${poster.id}`}>
+            <StyledLink key={poster.id} to={`/title/${type}/${poster.id}`}>
                 <PosterCard key={poster.id} {...poster} />
             </StyledLink>
         ))}

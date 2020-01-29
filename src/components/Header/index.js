@@ -14,12 +14,10 @@ const HeaderBlock = styled.div`
     width: 100%;
 `;
 
-function Header(props) {
-    return (
-        <HeaderBlock>
-            <Nav />
-        </HeaderBlock>
-    );
-}
+const Header = props => (
+    <HeaderBlock>
+        <Nav />
+    </HeaderBlock>
+);
 
 export default Header;
