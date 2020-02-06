@@ -22,7 +22,7 @@ const FlexContainer = styled.div`
 
 function App() {
     return (
-        // TODO: 1)remember_prev_route_state 2)movie_view 3)error_catcher 4)filter_shape 5)useFilter
+        // TODO: 1)pagination&queryStr 2)movie_view 3)error_catcher 4)filter_shape 5)useFilter
         <>
             <Router>
                 <FlexContainer>

@@ -7,10 +7,14 @@ import styled from 'styled-components';
 const PosterCardContainer = styled.div`
     margin: 16px;
     height: 300px;
-    outline: 1px #dadadada solid;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    outline: 1px solid #dadadada;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-flow: row nowrap;
+    &:hover {
+        outline: 1px solid #808080;
+        box-shadow: none;
+    }
 `;
 const PosterImageContainer = styled.div`
     height: 300px;
@@ -53,7 +57,7 @@ const PosterCard = ({ title, name, poster_path, overview}) => {
                 <PosterImage src={image_full_url} alt={alt_src} />
             </PosterImageContainer>
             <PosterInfoContainer>
-                <Title>{title ? title : name}</Title>
+                <Title>{title || name}</Title>
                 <Description>
                     {truncatedOverview}
                 </Description>

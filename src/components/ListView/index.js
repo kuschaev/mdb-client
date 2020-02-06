@@ -6,7 +6,10 @@ import PosterList from '../PosterList';
 import Spinner from '../Spinner';
 // Instruments
 import { api } from '../../api/api';
+import getYearsSinceArray from '../../instruments/utils';
 import styled from 'styled-components';
+import Pagination from '../Pagination';
+import { useLocation } from 'react-router-dom';
 
 const ListViewFlexContainer = styled.div`
     flex: 1;
@@ -18,13 +21,16 @@ const SpinnerFlexContainer = styled.div`
     align-items: center;
 `;
 
-const yearsSince1900 = Array(new Date().getFullYear() - 1899)
-    .fill()
-    .map((_, index) => index + 1900)
-    .sort((a, b) => b - a);
+const useQuery = () => new URLSearchParams(useLocation().search);
 
-function ListView({ history, location, match }) {
+export default function ListView({ history, location, match }) {
     const { type, listType: subtype } = match.params;
+
+    const page = parseInt(useQuery().get('page')) || 1;
+
+    const [currentPage, setCurrentPage] = useState(page);
+
+    const [totalPages, setTotalPages] = useState(undefined);
 
     const [mediaFormat, setMediaFormat] = useState(subtype);
     const [selectedYear, setYear] = useState(2019);
@@ -32,31 +38,50 @@ function ListView({ history, location, match }) {
     const [postersList, setPostersList] = useState([]);
 
     const mediaFormats = ['movie', 'tv'];
-    const years = yearsSince1900;
+    const years = getYearsSinceArray(1970);
 
     const handleMediaFormatChange = mediaFormat => setMediaFormat(mediaFormat);
     const handleSelectedYearChange = year => setYear(year);
+    const handlePageChange = ({
+        currentTarget: {
+            dataset: { page }
+        }
+    }) => {
+        setCurrentPage(parseInt(page));
+        history.push({
+            search: `?${new URLSearchParams({ page: page }).toString()}`
+        });
+    };
 
+    // TODO: figure out double call
     useEffect(() => {
         setIsLoading(true);
         const getPostersList = async () => {
-            let list = [];
+            let list = [],
+                allPages = 1488;
             if (type === 'discover') {
-                list = await api.getDiscover(
+                ({
+                    results: list,
+                    total_pages: allPages
+                } = await api.getDiscover(
                     subtype,
                     undefined,
-                    undefined,
+                    currentPage,
                     selectedYear
-                );
+                ));
             } else {
-                list = await api.getList(type, subtype);
+                ({
+                    results: list,
+                    total_pages: allPages
+                } = await api.getList(type, subtype, currentPage));
             }
             setPostersList(list);
+            setTotalPages(allPages);
             setIsLoading(false);
         };
 
         getPostersList();
-    }, [type, subtype, selectedYear]);
+    }, [type, subtype, currentPage, selectedYear]);
 
     return (
         <ListViewFlexContainer>
@@ -71,13 +96,18 @@ function ListView({ history, location, match }) {
                     <Spinner />
                 </SpinnerFlexContainer>
             ) : (
-                <PosterList
-                    posters={postersList}
-                    type={type === 'discover' ? subtype : type}
-                />
+                <>
+                    <PosterList
+                        posters={postersList}
+                        type={type === 'discover' ? subtype : type}
+                    />
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        pageChangeHandler={handlePageChange}
+                    />
+                </>
             )}
         </ListViewFlexContainer>
     );
 }
-
-export default ListView;

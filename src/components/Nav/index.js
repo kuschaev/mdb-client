@@ -18,8 +18,8 @@ const SubMenuContainer = styled(MenuContainer)`
     margin: 0px 0px 2px 10px;
 `;
 const StyledMenuItem = styled.div`
-    ${props =>
-        props.isActive
+    ${({ isActive }) =>
+        isActive
             ? css`
                   color: #f5cf11;
                   background-color: #252525;
