@@ -16,8 +16,6 @@ export const api = {
         const result = await fetch(`${ROOT_URI}/discover/${type}?${query}`, {
             method: 'GET'
         });
-        // const { results: listItems } = await result.json();
-        // return listItems;
         return await result.json();
     },
     getList: async (type = 'movie', subtype = 'popular', page = '1') => {
@@ -25,8 +23,6 @@ export const api = {
         const result = await fetch(`${ROOT_URI}/${type}/${subtype}?${query}`, {
             method: 'GET'
         });
-        // const { results: listItems } = await result.json();
-        // return listItems;
         return await result.json();
     },
     getEntity: async (type = 'movie', id = 1, language = 'en-US') => {
@@ -34,7 +30,6 @@ export const api = {
         const result = await fetch(`${ROOT_URI}/${type}/${id}?${query}`, {
             method: 'GET'
         });
-        const entity = await result.json();
-        return entity;
+        return await result.json();;
     }
 };

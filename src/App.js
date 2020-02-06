@@ -7,8 +7,9 @@ import {
     Redirect
 } from 'react-router-dom';
 // Components
-import ListView from './components/ListView';
-import ItemView from './components/ItemView';
+import DiscoverView from './containers/DiscoverView';
+import ListView from './containers/ListView';
+import ItemView from './containers/ItemView';
 import Header from './components/Header';
 import Footer from './components/Footer';
 // Instruments
@@ -28,9 +29,16 @@ function App() {
                 <FlexContainer>
                     <Header />
                     <Switch>
-                        <Route path={'/list/:type/:listType'} component={ListView}/>
-                        <Route path={'/title/:type/:id'} component={ItemView}/>
-                        <Redirect to={'list/discover/movie'}  />
+                        <Route
+                            path={'/discover/:type'}
+                            component={DiscoverView}
+                        />
+                        <Route
+                            path={'/list/:type/:listType'}
+                            component={ListView}
+                        />
+                        <Route path={'/title/:type/:id'} component={ItemView} />
+                        <Redirect to={'list/discover/movie'} />
                     </Switch>
                     <Footer />
                 </FlexContainer>

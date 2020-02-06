@@ -1,8 +1,8 @@
 // Core
 import React, { useEffect, useState } from 'react';
 // Components
-import MediaItem from '../MediaItem';
-import Spinner from '../Spinner';
+import MediaItem from '../../components/MediaItem';
+import Spinner from '../../components/Spinner';
 // Instruments
 import { api } from '../../api/api';
 import styled from 'styled-components';

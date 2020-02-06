@@ -1,15 +1,13 @@
 // Core
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 // Components
-import ControlPanel from '../ControlPanel';
-import PosterList from '../PosterList';
-import Spinner from '../Spinner';
+import PosterList from '../../components/PosterList';
+import Pagination from '../../components/Pagination';
+import Spinner from '../../components/Spinner';
 // Instruments
 import { api } from '../../api/api';
-import getYearsSinceArray from '../../instruments/utils';
 import styled from 'styled-components';
-import Pagination from '../Pagination';
-import { useLocation } from 'react-router-dom';
 
 const ListViewFlexContainer = styled.div`
     flex: 1;
@@ -29,19 +27,10 @@ export default function ListView({ history, location, match }) {
     const page = parseInt(useQuery().get('page')) || 1;
 
     const [currentPage, setCurrentPage] = useState(page);
-
     const [totalPages, setTotalPages] = useState(undefined);
-
-    const [mediaFormat, setMediaFormat] = useState(subtype);
-    const [selectedYear, setYear] = useState(2019);
     const [isLoading, setIsLoading] = useState(true);
     const [postersList, setPostersList] = useState([]);
 
-    const mediaFormats = ['movie', 'tv'];
-    const years = getYearsSinceArray(1970);
-
-    const handleMediaFormatChange = mediaFormat => setMediaFormat(mediaFormat);
-    const handleSelectedYearChange = year => setYear(year);
     const handlePageChange = ({
         currentTarget: {
             dataset: { page }
@@ -53,54 +42,32 @@ export default function ListView({ history, location, match }) {
         });
     };
 
-    // TODO: figure out double call
     useEffect(() => {
         setIsLoading(true);
         const getPostersList = async () => {
-            let list = [],
-                allPages = 1488;
-            if (type === 'discover') {
-                ({
-                    results: list,
-                    total_pages: allPages
-                } = await api.getDiscover(
-                    subtype,
-                    undefined,
-                    currentPage,
-                    selectedYear
-                ));
-            } else {
-                ({
-                    results: list,
-                    total_pages: allPages
-                } = await api.getList(type, subtype, currentPage));
-            }
-            setPostersList(list);
-            setTotalPages(allPages);
+            const { results, total_pages } = await api.getList(
+                type,
+                subtype,
+                currentPage
+            );
+
+            setPostersList(results);
+            setTotalPages(total_pages);
             setIsLoading(false);
         };
 
         getPostersList();
-    }, [type, subtype, currentPage, selectedYear]);
+    }, [type, subtype, currentPage]);
 
     return (
         <ListViewFlexContainer>
-            <ControlPanel
-                mediaFormats={mediaFormats}
-                mediaFormatChangeHandler={handleMediaFormatChange}
-                years={years}
-                yearsChangeHandler={handleSelectedYearChange}
-            />
             {isLoading ? (
                 <SpinnerFlexContainer>
                     <Spinner />
                 </SpinnerFlexContainer>
             ) : (
                 <>
-                    <PosterList
-                        posters={postersList}
-                        type={type === 'discover' ? subtype : type}
-                    />
+                    <PosterList posters={postersList} type={type} />
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
