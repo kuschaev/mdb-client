@@ -30,6 +30,13 @@ export const api = {
         const result = await fetch(`${ROOT_URI}/${type}/${id}?${query}`, {
             method: 'GET'
         });
-        return await result.json();;
+        return await result.json();
+    },
+    searchFor: async (type = 'movie', searchQuery = '', page = '1') => {
+        const query = `query=${searchQuery}&page=${page}&api_key=${API_KEY}`;
+        const result = await fetch(`${ROOT_URI}/search/${type}?${query}`, {
+            method: 'GET'
+        });
+        return await result.json();
     }
 };

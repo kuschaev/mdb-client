@@ -74,10 +74,24 @@ const Nav = ({ history }) => {
 
     function navigateTo(event) {
         const { type, subtype } = event.currentTarget.dataset;
-        const path =
-            type === 'discover'
-                ? `/discover/${subtype}`
-                : `/list/${type}/${subtype}`;
+
+        let path;
+        switch (type) {
+            case 'discover':
+                path = `/discover/${subtype}`;
+                break;
+            case 'search':
+                path = `/search/${subtype}`;
+                break;
+            case 'movie':
+            case 'tv':
+                path = `/list/${type}/${subtype}`;
+                break;
+            default:
+                path = ``;
+                break;
+        }
+
         history.push(path);
     }
 

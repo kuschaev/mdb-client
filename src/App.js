@@ -8,10 +8,12 @@ import {
 } from 'react-router-dom';
 // Components
 import DiscoverView from './containers/DiscoverView';
+import SearchView from './containers/SearchView';
 import ListView from './containers/ListView';
 import ItemView from './containers/ItemView';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ErrorBoundary from './components/ErrorBoundary';
 // Instruments
 import './App.css';
 import styled from 'styled-components';
@@ -27,20 +29,29 @@ function App() {
         <>
             <Router>
                 <FlexContainer>
-                    <Header />
-                    <Switch>
-                        <Route
-                            path={'/discover/:type'}
-                            component={DiscoverView}
-                        />
-                        <Route
-                            path={'/list/:type/:listType'}
-                            component={ListView}
-                        />
-                        <Route path={'/title/:type/:id'} component={ItemView} />
-                        <Redirect to={'list/discover/movie'} />
-                    </Switch>
-                    <Footer />
+                    <ErrorBoundary>
+                        <Header />
+                        <Switch>
+                            <Route
+                                path={'/discover/:type'}
+                                component={DiscoverView}
+                            />
+                            <Route
+                                path={'/list/:type/:listType'}
+                                component={ListView}
+                            />
+                            <Route
+                                path={'/title/:type/:id'}
+                                component={ItemView}
+                            />
+                            <Route
+                                path={'/search/:type'}
+                                component={SearchView}
+                            />
+                            <Redirect to={'/discover/movie'} />
+                        </Switch>
+                        <Footer />
+                    </ErrorBoundary>
                 </FlexContainer>
             </Router>
         </>

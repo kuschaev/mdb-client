@@ -48,6 +48,20 @@ const nestedArrayData = [
                 key: 'tvat'
             }
         ]
+    ],
+    [
+        { label: 'Search', type: 'search', key: 's' },
+        [
+            { label: 'Movies', type: 'search', subtype: 'movie', key: 'sm' },
+            { label: 'TV Shows', type: 'search', subtype: 'tv', key: 'stv' }
+            // { label: 'People', type: 'search', subtype: 'person', key: 'sp' },
+            // {
+            //     label: 'Everything',
+            //     type: 'search',
+            //     subtype: 'multi',
+            //     key: 'smlt'
+            // }
+        ]
     ]
 ];
 
