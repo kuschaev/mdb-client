@@ -13,10 +13,9 @@ const SearchBarContainer = styled.div`
 `;
 
 const SearchBar = ({ searchQueryValue, searchQueryChangeHandler }) => {
-    const handleSearchQueryChange = e => {
-        console.log(e);
+    const handleSearchQueryChange = e =>
         searchQueryChangeHandler(e.target.value.toLowerCase());
-    };
+
     return (
         <SearchBarContainer>
             <input

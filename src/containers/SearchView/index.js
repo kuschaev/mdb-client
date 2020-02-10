@@ -27,14 +27,15 @@ export default function SearchView({ history, location, match }) {
     const { type } = match.params;
 
     const page = parseInt(useQuery().get('page')) || 1;
+    const query = useQuery().get('query') || '';
 
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState(query);
     const [currentPage, setCurrentPage] = useState(page);
     const [totalPages, setTotalPages] = useState(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [postersList, setPostersList] = useState([]);
 
-    const debouncedSearchQuery = useDebounce(searchQuery, 700);
+    let debouncedSearchQuery = useDebounce(searchQuery, 700);
 
     const handleSearchQueryChange = searchQueryValue => {
         setSearchQuery(searchQueryValue);
@@ -65,14 +66,15 @@ export default function SearchView({ history, location, match }) {
         const { pathname } = location;
         const searchParams = new URLSearchParams(location.search);
         searchParams.set('page', page);
-            history.push({
-                pathname: pathname,
-                search: searchParams.toString()
-            });
-        // history.push({
-        //     search: `${new URLSearchParams({ page: page }).toString()}`
-        // });
+        history.push({
+            pathname: pathname,
+            search: searchParams.toString()
+        });
     };
+
+    useEffect(() => {
+        setSearchQuery(query);
+    }, [type, query]);
 
     useEffect(() => {
         if (debouncedSearchQuery) {
@@ -93,7 +95,8 @@ export default function SearchView({ history, location, match }) {
         } else {
             setPostersList([]);
         }
-    }, [type, debouncedSearchQuery, currentPage]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedSearchQuery, currentPage]);
 
     return (
         <>
@@ -106,21 +109,23 @@ export default function SearchView({ history, location, match }) {
                     <SpinnerFlexContainer>
                         <Spinner />
                     </SpinnerFlexContainer>
-                ) : (
+                ) : searchQuery && totalPages === 0 ? (
+                    <SpinnerFlexContainer>
+                        <p>I found nothing matching your query.</p>
+                    </SpinnerFlexContainer>
+                ) : postersList.length ? (
                     <>
-                        {postersList.length ? (
-                            <>
-                                <PosterList posters={postersList} type={type} />
-                                <Pagination
-                                    currentPage={currentPage}
-                                    totalPages={totalPages}
-                                    pageChangeHandler={handlePageChange}
-                                />
-                            </>
-                        ) : (
-                            <SpinnerFlexContainer></SpinnerFlexContainer>
-                        )}
+                        <PosterList posters={postersList} type={type} />
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            pageChangeHandler={handlePageChange}
+                        />
                     </>
+                ) : (
+                    <SpinnerFlexContainer>
+                        <p>Start typing...</p>
+                    </SpinnerFlexContainer>
                 )}
             </SearchViewFlexContainer>
         </>
