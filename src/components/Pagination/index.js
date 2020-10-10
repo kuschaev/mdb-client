@@ -2,6 +2,8 @@
 import React from 'react';
 // Instruments
 import styled from 'styled-components';
+// Icons
+import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 
 const PagesContainer = styled.div`
     display: flex;
@@ -11,8 +13,9 @@ const PagesContainer = styled.div`
     width: calc(100vw - 32px);
 `;
 const PageBlock = styled.div`
-    height: 20px;
-    width: 20px;
+    line-height: 30px;
+    height: 30px;
+    width: 30px;
     margin: 2px;
     border: 1px solid #8c8c8c;
     border-radius: 2px;
@@ -24,20 +27,34 @@ const PageBlock = styled.div`
     }
 `;
 
-const Pagination = ({ currentPage, totalPages, pageChangeHandler }) => (
-    <PagesContainer>
-        {Array(totalPages)
-            .fill()
-            .map((_, index) => (
-                <Page
-                    key={index}
-                    number={index + 1}
-                    isCurrent={index + 1 === currentPage}
-                    pageChangeHandler={pageChangeHandler}
-                />
-            ))}
-    </PagesContainer>
-);
+const Pagination = ({
+    currentPage,
+    totalPages,
+    pageChangeHandler,
+    nextPageHandler,
+    previousPageHandler,
+}) => {
+    console.log('➡️Pagination currentPage', currentPage);
+    return (
+        <PagesContainer>
+            <ArrowButton
+                pageChangeHandler={previousPageHandler}
+                isNext={false}
+            />
+            {Array(totalPages)
+                .fill()
+                .map((_, index) => (
+                    <Page
+                        key={index}
+                        number={index + 1}
+                        isCurrent={index + 1 === currentPage}
+                        pageChangeHandler={pageChangeHandler}
+                    />
+                ))}
+            <ArrowButton pageChangeHandler={nextPageHandler} isNext={true} />
+        </PagesContainer>
+    );
+};
 
 const Page = ({ number, isCurrent, pageChangeHandler }) => (
     <PageBlock
@@ -48,5 +65,13 @@ const Page = ({ number, isCurrent, pageChangeHandler }) => (
         {number}
     </PageBlock>
 );
+
+const ArrowButton = ({ pageChangeHandler, isNext }) => {
+    return (
+        <PageBlock onClick={pageChangeHandler}>
+            {isNext ? <BsArrowRight /> : <BsArrowLeft />}
+        </PageBlock>
+    );
+};
 
 export default Pagination;

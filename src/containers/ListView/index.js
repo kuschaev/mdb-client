@@ -28,17 +28,34 @@ export default function ListView({ history, location, match }) {
 
     const [currentPage, setCurrentPage] = useState(page);
     const [totalPages, setTotalPages] = useState(undefined);
+
     const [isLoading, setIsLoading] = useState(true);
     const [postersList, setPostersList] = useState([]);
 
     const handlePageChange = ({
         currentTarget: {
-            dataset: { page }
-        }
+            dataset: { page },
+        },
     }) => {
+        console.log('page', page);
         setCurrentPage(parseInt(page));
         history.push({
-            search: `?${new URLSearchParams({ page: page }).toString()}`
+            search: `?${new URLSearchParams({ page: page }).toString()}`,
+        });
+    };
+
+    const handlePageIncrement = () => {
+        const nextPage = currentPage + 1 > totalPages ? totalPages : currentPage + 1;
+        setCurrentPage(parseInt(nextPage));
+        history.push({
+            search: `?${new URLSearchParams({ page: nextPage }).toString()}`,
+        });
+    };
+    const handlePageDecrement = () => {
+        const prevPage = currentPage - 1 < 1 ? 1 : currentPage - 1;
+        setCurrentPage(parseInt(prevPage));
+        history.push({
+            search: `?${new URLSearchParams({ page: prevPage }).toString()}`,
         });
     };
 
@@ -55,7 +72,7 @@ export default function ListView({ history, location, match }) {
             setTotalPages(total_pages);
             setIsLoading(false);
         };
-
+        console.log('ZAPROS ULETEL');
         getPostersList();
     }, [type, subtype, currentPage]);
 
@@ -72,6 +89,8 @@ export default function ListView({ history, location, match }) {
                         currentPage={currentPage}
                         totalPages={totalPages}
                         pageChangeHandler={handlePageChange}
+                        nextPageHandler={handlePageIncrement}
+                        previousPageHandler={handlePageDecrement}
                     />
                 </>
             )}

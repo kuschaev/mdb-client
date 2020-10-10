@@ -28,6 +28,7 @@ export default function DiscoverView({ history, location, match }) {
 
     const page = parseInt(useQuery().get('page')) || 1;
 
+    // TODO: going to '/discover/movie' must nullify current page state
     const [currentPage, setCurrentPage] = useState(page);
     const [totalPages, setTotalPages] = useState(undefined);
 
@@ -52,6 +53,21 @@ export default function DiscoverView({ history, location, match }) {
         });
     };
 
+    const handlePageIncrement = () => {
+        const nextPage = currentPage + 1 > totalPages ? totalPages : currentPage + 1;
+        setCurrentPage(parseInt(nextPage));
+        history.push({
+            search: `?${new URLSearchParams({ page: nextPage }).toString()}`,
+        });
+    };
+    const handlePageDecrement = () => {
+        const prevPage = currentPage - 1 < 1 ? 1 : currentPage - 1;
+        setCurrentPage(parseInt(prevPage));
+        history.push({
+            search: `?${new URLSearchParams({ page: prevPage }).toString()}`,
+        });
+    };
+
     useEffect(() => {
         setIsLoading(true);
         const getPostersList = async () => {
@@ -66,7 +82,7 @@ export default function DiscoverView({ history, location, match }) {
             setTotalPages(total_pages);
             setIsLoading(false);
         };
-
+        console.log('ZAPROS ULETEL');
         getPostersList();
     }, [type, currentPage, selectedYear]);
 
@@ -84,14 +100,13 @@ export default function DiscoverView({ history, location, match }) {
                 </SpinnerFlexContainer>
             ) : (
                 <>
-                    <PosterList
-                        posters={postersList}
-                        type={type}
-                    />
+                    <PosterList posters={postersList} type={type} />
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
                         pageChangeHandler={handlePageChange}
+                        nextPageHandler={handlePageIncrement}
+                        previousPageHandler={handlePageDecrement}
                     />
                 </>
             )}
