@@ -27,28 +27,28 @@ function App() {
     return (
         // TODO: 1)pagination&queryStr 2)movie_view 3)error_catcher 4)filter_shape 5)useFilter
         <>
-            <Router basename='/mdb-client'>
+            <Router>
                 <FlexContainer>
                     <ErrorBoundary>
                         <Header />
                         <Switch>
                             <Route
-                                path={'/discover/:type'}
+                                path={process.env.PUBLIC_URL + '/discover/:type'}
                                 component={DiscoverView}
                             />
                             <Route
-                                path={'/list/:type/:listType'}
+                                path={process.env.PUBLIC_URL + '/list/:type/:listType'}
                                 component={ListView}
                             />
                             <Route
-                                path={'/title/:type/:id'}
+                                path={process.env.PUBLIC_URL + '/title/:type/:id'}
                                 component={ItemView}
                             />
                             <Route
-                                path={'/search/:type'}
+                                path={process.env.PUBLIC_URL + '/search/:type'}
                                 component={SearchView}
                             />
-                            <Redirect to={'/discover/movie'} />
+                            <Redirect to={process.env.PUBLIC_URL + '/discover/movie'} />
                         </Switch>
                         <Footer />
                     </ErrorBoundary>
