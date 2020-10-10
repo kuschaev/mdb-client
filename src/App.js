@@ -27,7 +27,7 @@ function App() {
     return (
         // TODO: 1)pagination&queryStr 2)movie_view 3)error_catcher 4)filter_shape 5)useFilter
         <>
-            <Router>
+            <Router basename='/mdb-client'>
                 <FlexContainer>
                     <ErrorBoundary>
                         <Header />
