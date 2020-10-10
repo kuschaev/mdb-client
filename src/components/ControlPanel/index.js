@@ -11,10 +11,6 @@ const PanelContainer = styled.div`
     justify-content: flex-start;
     align-items: flex-start;
 `;
-const MediaFormatSelector = styled.select`
-    margin-left: 10px;
-    width: 80px;
-`;
 const YearSelector = styled.select`
     margin-left: 10px;
     width: 60px;
@@ -26,8 +22,6 @@ const ControlPanel = ({
     years,
     yearsChangeHandler
 }) => {
-    const handleMediaFormatSelectorChange = event =>
-        mediaFormatChangeHandler(event.target.value);
     const handleYearSelectorChange = ({ target }) => {
         target.size = 1;
         target.blur();
@@ -40,17 +34,6 @@ const ControlPanel = ({
     return (
         <>
             <PanelContainer>
-                <span>Select media type</span>
-                <MediaFormatSelector
-                    onChange={handleMediaFormatSelectorChange}
-                    defaultValue={'movie'}
-                >
-                    {mediaFormats.map(format => (
-                        <option value={format} key={format}>
-                            {format.toLowerCase()}
-                        </option>
-                    ))}
-                </MediaFormatSelector>
                 <span>Select year of release</span>
                 <YearSelector
                     onChange={handleYearSelectorChange}

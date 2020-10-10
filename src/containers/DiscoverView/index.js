@@ -32,7 +32,6 @@ export default function DiscoverView({ history, location, match }) {
     const [currentPage, setCurrentPage] = useState(page);
     const [totalPages, setTotalPages] = useState(undefined);
 
-    const [mediaFormat, setMediaFormat] = useState(type);
     const [selectedYear, setYear] = useState(2019);
     const [isLoading, setIsLoading] = useState(true);
     const [postersList, setPostersList] = useState([]);
@@ -40,7 +39,6 @@ export default function DiscoverView({ history, location, match }) {
     const mediaFormats = ['movie', 'tv'];
     const years = getYearsSinceArray(1970);
 
-    const handleMediaFormatChange = mediaFormat => setMediaFormat(mediaFormat);
     const handleSelectedYearChange = year => setYear(year);
     const handlePageChange = ({
         currentTarget: {
@@ -89,8 +87,6 @@ export default function DiscoverView({ history, location, match }) {
     return (
         <ListViewFlexContainer>
             <ControlPanel
-                mediaFormats={mediaFormats}
-                mediaFormatChangeHandler={handleMediaFormatChange}
                 years={years}
                 yearsChangeHandler={handleSelectedYearChange}
             />
